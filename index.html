@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Test Page</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.11/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ext-language_tools.js"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+        });
+    </script>
+    <style>
+        main {
+            display: flex
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Page</h1>
+    <h2>LaTeXエディタ</h2>
+
+    <main>
+        <div id="editor" style="height: 600px;width: 50%;"></div>
+        <div id="latex" style="height: 600px;width: 50%;border: 5px double #333333; border-radius: 10px; overflow: scroll;"></div>
+    </main>
+    
+
+    <script>
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.getSession().setMode("ace/mode/latex");
+        editor.setOptions({
+            enableBasicAutocompletion: true,
+            enableSnippets: true,
+            enableLiveAutocompletion: true
+        });
+
+        document.addEventListener('keyup', renderLaTeX);
+
+        function renderLaTeX(){
+            if (event.isComposing || event.keyCode === 229) {
+                return;
+            }
+            document.getElementById('latex').innerText = '\\(' + editor.getValue() + '\\)';
+            MathJax.Hub.Typeset(document.getElementById('latex'));
+        }
+
+    </script>
+</body>
+</html>
