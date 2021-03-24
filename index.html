@@ -23,8 +23,8 @@
     <h2>LaTeXエディタ</h2>
 
     <main>
-        <div id="editor" style="height: 600px;width: 50%;"></div>
-        <div id="latex" style="height: 600px;width: 50%;border: 5px double #333333; border-radius: 10px; overflow: scroll;"></div>
+        <div id="editor" style="height: 650px;width: 50%;"></div>
+        <div id="latex" style="height: 600px;width: 50%;padding: 1em;border: 5px double #333333; border-radius: 10px; overflow: scroll;"></div>
     </main>
     
 
@@ -32,6 +32,7 @@
         var editor = ace.edit("editor");
         editor.setTheme("ace/theme/monokai");
         editor.getSession().setMode("ace/mode/latex");
+        editor.setFontSize(16);
         editor.setOptions({
             enableBasicAutocompletion: true,
             enableSnippets: true,
