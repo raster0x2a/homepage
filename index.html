@@ -37,7 +37,7 @@
     </form>
     <div>
         枠の色
-        <input type="color" id="frame-color" value="#909090">
+        <input type="color" id="frame-color" value="#505050">
     </div>
     
 
@@ -68,11 +68,11 @@
             MathJax.Hub.Typeset(document.getElementById('latex'));
         }
 
-////////////////////////////////////////
+        ////////////////////////////////////////
 
         // global変数
         colorPalette = [];
-        frameColor = "#909090";
+        frameColor = "#505050";
 
         // 色変更イベント
         document.getElementById("frame-color").addEventListener("change", function(e){
