@@ -48,7 +48,7 @@
     
 
     <script>
-        var editor = ace.edit("editor");
+        let editor = ace.edit("editor");
         editor.setTheme("ace/theme/monokai");
         editor.getSession().setMode("ace/mode/latex");
         editor.setFontSize(16);
@@ -88,48 +88,49 @@
         // 0~255の整数値3つからカラーコード文字列を生成
         function generateColorCode(r, g, b){
             let colorCode = "#" + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+            console.log(colorCode);
             return colorCode;
         }
 
         // RGBカラーコード配列を生成しcolorPaletteを変更
         function changeColorPalette(){
             // 選択されている色パターンを取得
-            var selectedType = document.getElementById("color-type").colorType.value;
+            let selectedType = document.getElementById("color-type").colorType.value;
             // 新規色パレット
-            var newColorPalette = [];
+            let newColorPalette = [];
             switch(selectedType){
                 case "ランダム":
-                    for(var i=0; i<4; i++){
-                        var r = Math.floor(Math.random()*256);
-                        var g = Math.floor(Math.random()*256);
-                        var b = Math.floor(Math.random()*256);
+                    for(let i=0; i<4; i++){
+                        let r = Math.floor(Math.random()*256);
+                        let g = Math.floor(Math.random()*256);
+                        let b = Math.floor(Math.random()*256);
                         
                         newColorPalette.push(generateColorCode(r, g, b));
                     }
                     break;
                 case "モノクロ":
-                    for(var i=0; i<4; i++){
-                        var r = Math.floor(Math.random()*256);
-                        var g = r;
-                        var b = r;
+                    for(let i=0; i<4; i++){
+                        let r = Math.floor(Math.random()*256);
+                        let g = r;
+                        let b = r;
                         
                         newColorPalette.push(generateColorCode(r, g, b));
                     }
                     break;
                 case "暖色":
-                    for(var i=0; i<4; i++){
-                        var r = 256;
-                        var g = Math.floor(Math.random()*220);
-                        var b = Math.floor(Math.random()*220);
+                    for(let i=0; i<4; i++){
+                        let r = 255;
+                        let g = Math.floor(Math.random()*220);
+                        let b = Math.floor(Math.random()*220);
                         
                         newColorPalette.push(generateColorCode(r, g, b));
                     }
                     break;
                 case "寒色":
-                    for(var i=0; i<4; i++){
-                        var r = Math.floor(Math.random()*220);
-                        var g = Math.floor(Math.random()*220);
-                        var b = 256;
+                    for(let i=0; i<4; i++){
+                        let r = Math.floor(Math.random()*220);
+                        let g = Math.floor(Math.random()*220);
+                        let b = 255;
                         
                         newColorPalette.push(generateColorCode(r, g, b));
                     }
@@ -142,13 +143,13 @@
 
         //canvasをランダムに描画
         function drawImage(){
-            var cvs = document.getElementById("cv1");
-            var ctx = cvs.getContext("2d");
+            let cvs = document.getElementById("cv1");
+            let ctx = cvs.getContext("2d");
 
             // 内側を描画
-            for(var i=0; i<8; i++){
-                for(var j=0; j<8; j++){
-                    var randColor = Math.floor(Math.random() * colorPalette.length);
+            for(let i=0; i<8; i++){
+                for(let j=0; j<8; j++){
+                    let randColor = Math.floor(Math.random() * colorPalette.length);
                     ctx.fillStyle = colorPalette[randColor];
                     ctx.fillRect(20 + 40*i, 20 + 40*j, 40, 40);
                 }
@@ -157,8 +158,8 @@
 
         // フレームを描画
         function drawFrame(){
-            var cvs = document.getElementById("cv1");
-            var ctx = cvs.getContext("2d");
+            let cvs = document.getElementById("cv1");
+            let ctx = cvs.getContext("2d");
 
             ctx.fillStyle = frameColor;
             ctx.fillRect(0, 0, cvs.width, 20);
@@ -169,10 +170,10 @@
 
         // canvasデータを画像に変換
         function convertToImage(){
-            var cvs = document.getElementById("cv1");
-            var ctx = cvs.getContext("2d");
+            let cvs = document.getElementById("cv1");
+            let ctx = cvs.getContext("2d");
             
-            var png = cvs.toDataURL();
+            let png = cvs.toDataURL();
             document.getElementById("image").src = png;
         }
 
