@@ -29,7 +29,7 @@ function renderLaTeX(){
 (function() {
 
 let colorPalette = [];
-let frameColor = "#ccc";
+let frameColor = "#cccccc";
 
 // 色変更イベント
 $("#frame-color").on("change", function(e){
