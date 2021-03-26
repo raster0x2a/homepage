@@ -87,7 +87,7 @@ main {
 #cv2 {
   padding: 0;
   margin: 0;
-  border: solid 0.5em gray;
+  border: solid 5px gray;
 }
 #result-canvas-display {
   padding: 0;

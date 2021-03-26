@@ -249,6 +249,11 @@ function onStart(e) {
         cy = e.layerY;
         //console.log(cx, cy);
     }
+
+    // ズレ補正
+    cx -= 5;
+    cy -= 5;
+
     context.beginPath();
     context.strokeStyle = selectedColor;
     context.lineCap = 'round';
@@ -273,6 +278,11 @@ function onMove(e){
         cx = e.layerX;
         cy = e.layerY;
     }
+
+    // ズレ補正
+    cx -= 5;
+    cy -= 5;
+
     if(dragging){
         context.lineTo(cx, cy);
         context.stroke();
@@ -293,6 +303,11 @@ function onEnd(e){
         cx = e.layerX;
         cy = e.layerY;
     }
+
+    // ズレ補正
+    cx -= 5;
+    cy -= 5;
+
     context.lineTo(cx, cy);
     context.stroke();
     dragging = false;
