@@ -12,179 +12,71 @@
           tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
         });
     </script>
-    <style>
-        #latex-field {
-            display: flex
-        }
-    </style>
+    <link type="text/css" rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Test Page</h1>
 
     <h2>LaTeXエディタ</h2>
     <div id="latex-field">
-        <div id="editor" style="height: 650px;width: 50%;"></div>
-        <div id="latex" style="height: 600px;width: 50%;padding: 1em;border: 5px double #333333; border-radius: 10px; overflow: scroll;"></div>
+        <div id="editor"></div>
+        <div id="latex"></div>
     </div>
 
     <h2>ランダムな色でモザイク画像を生成</h2>
-    <form id="color-type">
+    <div>
         色のパターン
-        <input name="colorType" type="radio" value="ランダム" checked> ランダム
-        <input name="colorType" type="radio" value="モノクロ"> モノクロ
-        <input name="colorType" type="radio" value="暖色"> 暖色
-        <input name="colorType" type="radio" value="寒色"> 寒色
-    </form>
+        <input name="color-type" type="radio" value="ランダム" checked> ランダム
+        <input name="color-type" type="radio" value="モノクロ"> モノクロ
+        <input name="color-type" type="radio" value="暖色"> 暖色
+        <input name="color-type" type="radio" value="寒色"> 寒色
+    </div>
     <div>
         枠の色
         <input type="color" id="frame-color" value="#ccc">
     </div>
-    
-
-    <input type="button" value="画像生成" onclick="changeImage()">
+    <input type="button" id="generate-image" value="画像生成">
     <br>
-    <canvas id="cv1" width="360" height="360" style="display:none;"></canvas>
-    <img id="image">
+    <canvas id="cv1" width="360" height="360"></canvas>
+    <img id="rand-image">
+
+    <h1>落書きキャンバス</h1>
+    <span>
+        <button type="button" class="color-btn" value="black"></button>
+        <button type="button" class="color-btn" value="white"></button>
+        <button type="button" class="color-btn" value="red"></button>
+        <button type="button" class="color-btn" value="blue"></button>
+        <button type="button" class="color-btn" value="yellow"></button>
+        <button type="button" class="color-btn" value="green"></button>
+        <button type="button" class="color-btn" value="pink"></button>
+        <button type="button" class="color-btn" value="orange"></button>
+        <button type="button" class="color-btn" value="darkviolet"></button>
+        <button type="button" class="color-btn" value="skyblue"></button>
+        <button type="button" class="color-btn" value="saddlebrown"></button>
+        <button type="button" class="color-btn" value="gray"></button>
+    </span>
+    <span id="color-list">
+    </span>
+    <br>
+    <span id="system-btn-list">
+    <button type="button" class="size-btn" value="1"><img id="circle1" src="images/dot_size.png"></img></button>
+    <button type="button" class="size-btn" value="4"><img id="circle2" src="images/dot_size.png"></img></button>
+    <button type="button" class="size-btn" value="7"><img id="circle3" src="images/dot_size.png"></img></button>
+    <button type="button" class="size-btn" value="10"><img id="circle4" src="images/dot_size.png"></img></button>
+
+    <button type="button" class="system-btn" id="clear-btn"><font size=3>クリア</font></button>
+    <button type="button" class="system-btn" id="download-btn"><font size=3>保存</font></button>
+
+    <input type="color" id="add-color" value="#000000">
+    <button type="button" class="system-btn" id="add-color-btn"><font size=3>色を追加</font></button>
+
+    <!---button type="button" class="system-btn" id="get-img-btn"><font size=3>画像化</font></button-->
+    </span>
+    <br>
+    <canvas id="cv2" width="700" height="500"></canvas>
+    <div id="result-canvas-display"></div>
+
     
-
-    <script>
-        let editor = ace.edit("editor");
-        editor.setTheme("ace/theme/monokai");
-        editor.getSession().setMode("ace/mode/latex");
-        editor.setFontSize(16);
-        editor.setOptions({
-            enableBasicAutocompletion: true,
-            enableSnippets: true,
-            enableLiveAutocompletion: true
-        });
-
-        document.addEventListener('keyup', renderLaTeX);
-
-        function renderLaTeX(){
-            if (event.isComposing || event.keyCode === 229) {
-                return;
-            }
-            document.getElementById('latex').innerText = '\\(' + editor.getValue() + '\\)';
-            MathJax.Hub.Typeset(document.getElementById('latex'));
-        }
-
-        ////////////////////////////////////////
-
-        // global変数
-        colorPalette = [];
-        frameColor = "#ccc";
-
-        // 色変更イベント
-        document.getElementById("frame-color").addEventListener("change", function(e){
-            frameColor = e.target.value;
-            // 枠の色を変更
-            drawFrame();
-            convertToImage();
-        }, false);
-
-        // ページ読み込み時に画像生成
-        changeImage();
-
-        // 0~255の整数値3つからカラーコード文字列を生成
-        function generateColorCode(r, g, b){
-            let colorCode = "#" + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
-            console.log(colorCode);
-            return colorCode;
-        }
-
-        // RGBカラーコード配列を生成しcolorPaletteを変更
-        function changeColorPalette(){
-            // 選択されている色パターンを取得
-            let selectedType = document.getElementById("color-type").colorType.value;
-            // 新規色パレット
-            let newColorPalette = [];
-            switch(selectedType){
-                case "ランダム":
-                    for(let i=0; i<4; i++){
-                        let r = Math.floor(Math.random()*256);
-                        let g = Math.floor(Math.random()*256);
-                        let b = Math.floor(Math.random()*256);
-                        
-                        newColorPalette.push(generateColorCode(r, g, b));
-                    }
-                    break;
-                case "モノクロ":
-                    for(let i=0; i<4; i++){
-                        let r = Math.floor(Math.random()*256);
-                        let g = r;
-                        let b = r;
-                        
-                        newColorPalette.push(generateColorCode(r, g, b));
-                    }
-                    break;
-                case "暖色":
-                    for(let i=0; i<4; i++){
-                        let r = 255;
-                        let g = Math.floor(Math.random()*220);
-                        let b = Math.floor(Math.random()*220);
-                        
-                        newColorPalette.push(generateColorCode(r, g, b));
-                    }
-                    break;
-                case "寒色":
-                    for(let i=0; i<4; i++){
-                        let r = Math.floor(Math.random()*220);
-                        let g = Math.floor(Math.random()*220);
-                        let b = 255;
-                        
-                        newColorPalette.push(generateColorCode(r, g, b));
-                    }
-                    break;
-            }
-
-            // パレットを更新
-            colorPalette = newColorPalette;
-        }
-
-        //canvasをランダムに描画
-        function drawImage(){
-            let cvs = document.getElementById("cv1");
-            let ctx = cvs.getContext("2d");
-
-            // 内側を描画
-            for(let i=0; i<8; i++){
-                for(let j=0; j<8; j++){
-                    let randColor = Math.floor(Math.random() * colorPalette.length);
-                    ctx.fillStyle = colorPalette[randColor];
-                    ctx.fillRect(20 + 40*i, 20 + 40*j, 40, 40);
-                }
-            }
-        }
-
-        // フレームを描画
-        function drawFrame(){
-            let cvs = document.getElementById("cv1");
-            let ctx = cvs.getContext("2d");
-
-            ctx.fillStyle = frameColor;
-            ctx.fillRect(0, 0, cvs.width, 20);
-            ctx.fillRect(0, cvs.height - 20, cvs.width, 20);
-            ctx.fillRect(0, 0, 20, cvs.height);
-            ctx.fillRect(cvs.width - 20, 0, 20, cvs.height);
-        }
-
-        // canvasデータを画像に変換
-        function convertToImage(){
-            let cvs = document.getElementById("cv1");
-            let ctx = cvs.getContext("2d");
-            
-            let png = cvs.toDataURL();
-            document.getElementById("image").src = png;
-        }
-
-        // 画像変更
-        function changeImage(){
-            changeColorPalette();
-            drawImage();
-            drawFrame();
-            convertToImage();
-        }
-
-    </script>
+    <script type="text/javascript" src="script.js"></script>
 </body>
 </html>
